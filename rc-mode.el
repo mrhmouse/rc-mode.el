@@ -123,10 +123,12 @@
       (previous-line))
     (current-indentation)))
 
+;;;###autoload
 (define-derived-mode rc-mode fundamental-mode "plan9-rc"
   (setq font-lock-defaults '(rc-highlights))
   (setq indent-line-function 'rc-indent-line))
 
+;;;###autoload
 (add-to-list 'auto-mode-alist
              '("\\.rc\\'" . rc-mode))
 
