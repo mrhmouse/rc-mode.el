@@ -38,45 +38,45 @@
 (defun rc-join-string (strings sep)
   (apply #'concat (rc-intersperse strings sep)))
 
-(setq rc-highlights
-      `(("'[^']*'"
-         . font-lock-string-face)
+(defvar rc-highlights
+  `(("'[^']*'"
+     . font-lock-string-face)
         
-        ("#.*$"
-         . font-lock-comment-face)
+    ("#.*$"
+     . font-lock-comment-face)
         
-        (,(rc-join-string '("fn" "break"
-                            "builtin" "cd"
-                            "echo" "eval"
-                            "exec" "exit"
-                            "limit" "newpgrp"
-                            "return" "shift"
-                            "umask" "wait"
-                            "whatis" "\\$#?\\*"
-                            "\\$0" "\\$apids?"
-                            "\\$bqstatus" "\\$cdpath"
-                            "\\$history" "\\$home"
-                            "\\$ifs" "\\$path" "\\$pid"
-                            "\\$prompt" "\\$status"
-                            "\\$version")
-                          "\\|")
-         . font-lock-builtin-face)
+    (,(rc-join-string '("fn" "break"
+                        "builtin" "cd"
+                        "echo" "eval"
+                        "exec" "exit"
+                        "limit" "newpgrp"
+                        "return" "shift"
+                        "umask" "wait"
+                        "whatis" "\\$#?\\*"
+                        "\\$0" "\\$apids?"
+                        "\\$bqstatus" "\\$cdpath"
+                        "\\$history" "\\$home"
+                        "\\$ifs" "\\$path" "\\$pid"
+                        "\\$prompt" "\\$status"
+                        "\\$version")
+                      "\\|")
+     . font-lock-builtin-face)
         
-        (,(rc-join-string '("if" "while" "for" "else" "if not"
-                            "switch"
-                            "@" "=" "&" "&&" "\\^"
-                            "|" ";"
-                            "<<?" ">>?"
-                            "\\(>>?\\|<<?\\||\\)\\[\\d+\\(=\\d+\\)\\]"
-                            "||" "~")
-                          "\\|")
-         . font-lock-keyword-face)
+    (,(rc-join-string '("if" "while" "for" "else" "if not"
+                        "switch"
+                        "@" "=" "&" "&&" "\\^"
+                        "|" ";"
+                        "<<?" ">>?"
+                        "\\(>>?\\|<<?\\||\\)\\[\\d+\\(=\\d+\\)\\]"
+                        "||" "~")
+                      "\\|")
+     . font-lock-keyword-face)
         
-        ("\\(?1:\\$#?\\$*\\w+\\)\\|\\(?1:\\w+\\)[[:space:]]*="
-         1 font-lock-variable-name-face)
+    ("\\(?1:\\$#?\\$*\\w+\\)\\|\\(?1:\\w+\\)[[:space:]]*="
+     1 font-lock-variable-name-face)
 
-        ("!"
-         . font-lock-negation-char-face)))
+    ("!"
+     . font-lock-negation-char-face)))
 
 (defun rc-indent-line ()
   "Indent current line as Plan9 RC shell script"
@@ -123,10 +123,14 @@
       (previous-line))
     (current-indentation)))
 
-(define-derived-mode rc-mode fundamental-mode
-  (setq mode-name "plan9-rc")
+;;;###autoload
+(define-derived-mode rc-mode fundamental-mode "plan9-rc"
   (setq font-lock-defaults '(rc-highlights))
   (setq indent-line-function 'rc-indent-line))
 
+;;;###autoload
 (add-to-list 'auto-mode-alist
              '("\\.rc\\'" . rc-mode))
+
+(provide 'rc-mode)
+;;; rc-mode.el ends here
