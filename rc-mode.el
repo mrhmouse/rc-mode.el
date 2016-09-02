@@ -123,8 +123,7 @@
       (previous-line))
     (current-indentation)))
 
-(define-derived-mode rc-mode fundamental-mode
-  (setq mode-name "plan9-rc")
+(define-derived-mode rc-mode fundamental-mode "plan9-rc"
   (setq font-lock-defaults '(rc-highlights))
   (setq indent-line-function 'rc-indent-line))
 
