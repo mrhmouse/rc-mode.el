@@ -132,3 +132,4 @@
              '("\\.rc\\'" . rc-mode))
 
 (provide 'rc-mode)
+;;; rc-mode.el ends here
