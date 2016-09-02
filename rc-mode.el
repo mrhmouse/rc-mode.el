@@ -130,3 +130,5 @@
 
 (add-to-list 'auto-mode-alist
              '("\\.rc\\'" . rc-mode))
+
+(provide 'rc-mode)
