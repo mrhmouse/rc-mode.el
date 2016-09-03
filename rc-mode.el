@@ -91,7 +91,22 @@
        (+ (rc-previous-line-indentation) 2))
       ((rc-looking-at-block-end)
        (- (rc-previous-line-indentation) 2))
+      ((rc-inside-list-continuation)
+       (rc-start-of-list-on-previous-line))
       (t (rc-previous-line-indentation))))))
+
+(defun rc-start-of-list-on-previous-line ()
+  (save-excursion
+    (rc-previous-line)
+    (end-of-line)
+    (while (not (looking-at "("))
+      (backward-char))
+    (+ 1 (current-column))))
+
+(defun rc-inside-list-continuation ()
+  (save-excursion
+    (rc-previous-line)
+    (looking-at ".*([^)]*$")))
 
 (defun rc-looking-at-block-end ()
   (save-excursion
@@ -101,7 +116,8 @@
 (defun rc-looking-at-continuation ()
   (save-excursion
     (rc-previous-line)
-    (looking-at ".*\\\\$")))
+    (or (looking-at ".*\\\\$")
+        (looking-at ".*([^)]*$"))))
 
 (defun rc-previous-line ()
   (forward-line -1)
