@@ -136,7 +136,7 @@
   (save-excursion
     (rc-previous-line)
     (while (rc-looking-at-continuation)
-      (previous-line))
+      (forward-line -1))
     (current-indentation)))
 
 ;;;###autoload
