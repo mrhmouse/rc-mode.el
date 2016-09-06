@@ -87,13 +87,31 @@
      (cond
       ((bobp) 0)
       ((or (rc-looking-at-continuation)
+           (rc-under-case-clause)
            (rc-under-block-header))
        (+ (rc-previous-line-indentation) 2))
       ((rc-looking-at-block-end)
-       (- (rc-previous-line-indentation) 2))
+       (rc-previous-block-indentation))
       ((rc-inside-list-continuation)
        (rc-start-of-list-on-previous-line))
       (t (rc-previous-line-indentation))))))
+
+(defun rc-previous-block-indentation ()
+  (save-excursion
+    (let ((depth 1))
+      (while (> depth 0)
+        (rc-previous-line)
+        (cond
+         ((rc-looking-at-block-header)
+          (setq depth (- depth 1)))
+         ((rc-looking-at-block-end)
+          (setq depth (+ depth 1)))))
+      (current-indentation))))
+
+(defun rc-under-case-clause ()
+  (save-excursion
+    (rc-previous-line)
+    (looking-at "^[ \t]*case\\b")))
 
 (defun rc-start-of-list-on-previous-line ()
   (save-excursion
@@ -127,10 +145,13 @@
     (forward-line -1)
     (beginning-of-line)))
 
+(defun rc-looking-at-block-header ()
+  (looking-at ".*{[ \t]*\\(#[^']*\\)?$"))
+
 (defun rc-under-block-header ()
   (save-excursion
     (rc-previous-line)
-    (looking-at ".*{[ \t]*\\(#[^']*\\)?$")))
+    (rc-looking-at-block-header)))
 
 (defun rc-previous-line-indentation ()
   (save-excursion
