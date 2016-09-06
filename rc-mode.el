@@ -4,7 +4,7 @@
 
 ;; Author: Jordan Brown
 ;; URL: https://github.com/mrhmouse/rc-mode.el
-;; Version: 1.0.1
+;; Version: 1.0.3
 ;; Keywords: rc, plan9, shell
 
 ;;; License:
