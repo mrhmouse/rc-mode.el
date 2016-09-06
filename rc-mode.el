@@ -4,7 +4,7 @@
 
 ;; Author: Jordan Brown
 ;; URL: https://github.com/mrhmouse/rc-mode.el
-;; Version: 1.0.4
+;; Version: 1.0.5
 ;; Keywords: rc, plan9, shell
 
 ;;; License:
@@ -66,7 +66,7 @@
      . font-lock-comment-face)
 
     (,(rc-join-string '("if" "while" "for" "else" "if not"
-                        "switch"
+                        "switch" "case"
                         "@" "=" "&" "&&" "\\^"
                         "|" ";"
                         "<<?" ">>?"
