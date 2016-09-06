@@ -4,7 +4,7 @@
 
 ;; Author: Jordan Brown
 ;; URL: https://github.com/mrhmouse/rc-mode.el
-;; Version: 1.0.3
+;; Version: 1.0.4
 ;; Keywords: rc, plan9, shell
 
 ;;; License:
@@ -141,8 +141,8 @@
 
 ;;;###autoload
 (define-derived-mode rc-mode fundamental-mode "plan9-rc"
-  (setq font-lock-defaults '(rc-highlights))
-  (setq indent-line-function 'rc-indent-line))
+  (setq-local font-lock-defaults '(rc-highlights))
+  (setq-local indent-line-function 'rc-indent-line))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist
