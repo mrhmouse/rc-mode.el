@@ -41,10 +41,7 @@
 (defvar rc-highlights
   `(("'[^']*'"
      . font-lock-string-face)
-        
-    ("#.*$"
-     . font-lock-comment-face)
-        
+                
     (,(rc-join-string '("fn" "break"
                         "builtin" "cd"
                         "echo" "eval"
@@ -61,7 +58,13 @@
                         "\\$version")
                       "\\|")
      . font-lock-builtin-face)
-        
+
+    ("\\(?1:\\$#?\\$*[a-zA-Z0-9_]+\\)\\|\\(?1:[a-zA-Z0-9_]+\\)[[:space:]]*="
+     1 font-lock-variable-name-face)
+
+    ("#.*$"
+     . font-lock-comment-face)
+
     (,(rc-join-string '("if" "while" "for" "else" "if not"
                         "switch"
                         "@" "=" "&" "&&" "\\^"
@@ -72,9 +75,6 @@
                       "\\|")
      . font-lock-keyword-face)
         
-    ("\\(?1:\\$#?\\$*[a-zA-Z0-9_]+\\)\\|\\(?1:[a-zA-Z0-9_]+\\)[[:space:]]*="
-     1 font-lock-variable-name-face)
-
     ("!"
      . font-lock-negation-char-face)))
 
