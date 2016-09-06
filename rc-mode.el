@@ -72,7 +72,7 @@
                       "\\|")
      . font-lock-keyword-face)
         
-    ("\\(?1:\\$#?\\$*\\w+\\)\\|\\(?1:\\w+\\)[[:space:]]*="
+    ("\\(?1:\\$#?\\$*[a-zA-Z0-9_]+\\)\\|\\(?1:[a-zA-Z0-9_]+\\)[[:space:]]*="
      1 font-lock-variable-name-face)
 
     ("!"
