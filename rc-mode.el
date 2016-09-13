@@ -4,7 +4,7 @@
 
 ;; Author: Jordan Brown
 ;; URL: https://github.com/mrhmouse/rc-mode.el
-;; Version: 1.0.8
+;; Version: 1.0.9
 ;; Keywords: rc, plan9, shell
 
 ;;; License:
@@ -91,23 +91,24 @@
 (defun rc-indent-line ()
   "Indent current line as Plan9 RC shell script"
   (interactive)
-  (indent-line-to 
-   (save-excursion
-     (beginning-of-line)
-     (cond
-      ((bobp) 0)
-      ((or (rc-looking-at-continuation)
-           (rc-under-case-clause)
-           (rc-under-block-header))
-       (+ (rc-previous-line-indentation)
-          (if (rc-looking-at-block-end)
-              0
-            2)))
-      ((rc-looking-at-block-end)
-       (rc-previous-block-indentation))
-      ((rc-inside-list-continuation)
-       (rc-start-of-list-on-previous-line))
-      (t (rc-previous-line-indentation))))))
+  (save-excursion
+    (indent-line-to 
+     (save-excursion
+       (beginning-of-line)
+       (cond
+        ((bobp) 0)
+        ((or (rc-looking-at-continuation)
+             (rc-under-case-clause)
+             (rc-under-block-header))
+         (+ (rc-previous-line-indentation)
+            (if (rc-looking-at-block-end)
+                0
+              2)))
+        ((rc-looking-at-block-end)
+         (rc-previous-block-indentation))
+        ((rc-inside-list-continuation)
+         (rc-start-of-list-on-previous-line))
+        (t (rc-previous-line-indentation)))))))
 
 (defun rc-previous-block-indentation ()
   (save-excursion
