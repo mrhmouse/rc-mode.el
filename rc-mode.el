@@ -4,7 +4,7 @@
 
 ;; Author: Jordan Brown
 ;; URL: https://github.com/mrhmouse/rc-mode.el
-;; Version: 1.0.12
+;; Version: 1.0.13
 ;; Keywords: rc, plan9, shell
 
 ;;; License:
@@ -109,12 +109,19 @@
        (rc-start-of-list-on-previous-line))
       (t (rc-previous-line-indentation))))))
 
+(defun rc-looking-at-else ()
+  (save-excursion
+    (beginning-of-line)
+    (looking-at "^[ \t]*}[ \t]*else[ \t]*{")))
+
 (defun rc-previous-block-indentation ()
   (save-excursion
     (let ((depth 1))
       (while (> depth 0)
         (rc-previous-line)
         (cond
+         ((rc-looking-at-else)
+          nil) ; skip else branches
          ((rc-looking-at-block-header)
           (setq depth (- depth 1)))
          ((rc-looking-at-block-end)
