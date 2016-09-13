@@ -4,7 +4,7 @@
 
 ;; Author: Jordan Brown
 ;; URL: https://github.com/mrhmouse/rc-mode.el
-;; Version: 1.0.6
+;; Version: 1.0.8
 ;; Keywords: rc, plan9, shell
 
 ;;; License:
@@ -38,41 +38,51 @@
 (defun rc-join-string (strings sep)
   (apply #'concat (rc-intersperse strings sep)))
 
+(defun rc-rx-choice (&rest regexes)
+  "Join the given regexes with \\|"
+  (rc-join-string regexes "\\|"))
+
+(defun rc-rx-exact-words (&rest words)
+  "Create a regexp matching one of the given words"
+  (apply #'rc-rx-choice (mapcar
+                         (lambda (word)
+                           (rc-join-string (list "\\<" word "\\>")
+                                           ""))
+                         words)))
+
 (defvar rc-highlights
   `(("'[^']*'"
      . font-lock-string-face)
                 
-    (,(rc-join-string '("fn" "break"
-                        "builtin" "cd"
-                        "echo" "eval"
-                        "exec" "exit"
-                        "limit" "newpgrp"
-                        "return" "shift"
-                        "umask" "wait"
-                        "whatis" "\\$#?\\*"
-                        "\\$0" "\\$apids?"
-                        "\\$bqstatus" "\\$cdpath"
-                        "\\$history" "\\$home"
-                        "\\$ifs" "\\$path" "\\$pid"
-                        "\\$prompt" "\\$status"
-                        "\\$version")
-                      "\\|")
+    (,(rc-rx-exact-words
+       "break" "builtin"
+       "cd" "echo" "eval"
+       "exec" "exit" "limit"
+       "newpgrp" "return"
+       "shift" "umask" "wait"
+       "whatis")
      . font-lock-builtin-face)
 
-    ("\\(?1:\\$#?\\$*[a-zA-Z0-9_]+\\)\\|^[^#]*\\(?1:[a-zA-Z0-9_]+\\)[[:space:]]*="
+    (,(rc-rx-choice
+       "[^$]#.*$"
+       "^#.*$")
+     . font-lock-comment-face)
+    
+    (,(rc-rx-choice
+       "\\(?1:\\<\\$#?\\$*[a-zA-Z0-9_]+\\>\\)"
+       "\\(?1:\\<[a-zA-Z0-9_]+\\>\\)[[:space:]]*="
+       "\\(?1:\\<\\$#?\\*\\>\\)"
+       "\\(?1:\\<\\*\\>\\)[[:space:]]*=")
      1 font-lock-variable-name-face)
 
-    ("#.*$"
-     . font-lock-comment-face)
-
-    (,(rc-join-string '("if" "while" "for" "else" "if not"
-                        "switch" "case"
-                        "@" "=" "&" "&&" "\\^"
-                        "|" ";"
-                        "<<?" ">>?"
-                        "\\(>>?\\|<<?\\||\\)\\[\\d+\\(=\\d+\\)\\]"
-                        "||" "~")
-                      "\\|")
+    (,(rc-rx-choice
+       "if" "while" "for" "else" "if not"
+       "switch" "case"
+       "@" "=" "&" "&&" "\\^"
+       "|" ";"
+       "<<?" ">>?"
+       "\\(>>?\\|<<?\\||\\)\\[\\d+\\(=\\d+\\)\\]"
+       "||" "~")
      . font-lock-keyword-face)
         
     ("!"
@@ -89,7 +99,10 @@
       ((or (rc-looking-at-continuation)
            (rc-under-case-clause)
            (rc-under-block-header))
-       (+ (rc-previous-line-indentation) 2))
+       (+ (rc-previous-line-indentation)
+          (if (rc-looking-at-block-end)
+              0
+            2)))
       ((rc-looking-at-block-end)
        (rc-previous-block-indentation))
       ((rc-inside-list-continuation)
