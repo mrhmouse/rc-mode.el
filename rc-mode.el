@@ -4,7 +4,7 @@
 
 ;; Author: Jordan Brown
 ;; URL: https://github.com/mrhmouse/rc-mode.el
-;; Version: 1.0.11
+;; Version: 1.0.12
 ;; Keywords: rc, plan9, shell
 
 ;;; License:
@@ -77,7 +77,7 @@
 
     (,(rc-rx-choice
        "if" "while" "for" "else" "if not"
-       "switch" "case"
+       "switch" "case" "fn"
        "@" "=" "&" "&&" "\\^"
        "|" ";"
        "<<?" ">>?"
